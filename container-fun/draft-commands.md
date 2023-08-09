@@ -39,3 +39,22 @@ docker exec -i alpine sh
 docker run -d -i --network funtime --network-alias partytime --name cent centos curl partytime:9200
 docker start cent
 docker container logs cent
+
+
+docker container run -d \
+--name DogsRGood2 \
+--mount type=bind,source="$(pwd)"/rad,target=/rad \
+nginx
+
+
+docker container run -d \
+--name oldPostgres \
+--mount type=volume,source=psql-data,target=/var/lib/postgresql/data \
+-e POSTGRES_PASSWORD=password \
+postgres:9.6.19 
+
+docker container run -d \
+--name newPostgres \
+--mount type=volume,source=psql-data,target=/var/lib/postgresql/data \
+-e POSTGRES_PASSWORD=password \
+postgres:9.6.24
