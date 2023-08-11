@@ -14,19 +14,21 @@ RUN apk add --update tini
 #   path '/usr/src/app' and make that your current directory 
 
 WORKDIR /usr/src/app
-COPY . .
 
 # In the next steps, you will load and install packages before applications 
 #   files for better caching
 
 # Step 5: Since node uses a "package manager", copy in 'package.json' and the
 #   corresponding lock file
+COPY package.json package-lock.json ./
 
 # Step 6: Install dependencies using npm
 #   To keep the image clean and small, run 'npm cache clean --force' after
 RUN npm install && npm cache clean --force
 
 # Step 7: Copy in all files from current directory
+
+COPY . .
 
 # Step 8. Run the application with command '/sbin/tini -- node app.js'.
 #   Remember to use the "exec form" which is the preferred syntax
