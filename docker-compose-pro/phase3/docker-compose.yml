@@ -15,8 +15,6 @@ services:
       - POSTGRES_PASSWORD=docker
     volumes:
       - drupal-data:/var/lib/postgresql/data
-    ports:
-      - 5432:5432
 
 volumes:
   drupal-data:
