@@ -1,0 +1,8 @@
+version: '3'
+
+services:
+  nginx:
+    image: jaglas/custom-nginx
+    build: .
+    ports:
+      - 8080:80
