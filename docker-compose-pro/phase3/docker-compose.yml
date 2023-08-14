@@ -1,0 +1,22 @@
+version: '3'
+
+services:
+  drupal:
+    build: .
+    image: jaglas/custom-drupal
+    ports:
+      - 8080:80
+    links:
+      - postgres
+
+  postgres:
+    image: postgres:9.6
+    environment:
+      - POSTGRES_PASSWORD=docker
+    volumes:
+      - drupal-data:/var/lib/postgresql/data
+    ports:
+      - 5432:5432
+
+volumes:
+  drupal-data:
