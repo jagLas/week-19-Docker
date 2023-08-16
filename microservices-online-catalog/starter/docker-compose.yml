@@ -11,4 +11,4 @@ services:
       - ./backend/catalog-management:/app:delegated
       - /app/node_modules
     environment:
-      - PORT=${BACKEND_CATALOG_MANAGEMENT_PORT}:${BACKEND_CATALOG_MANAGEMENT_PORT}
+      - PORT=${BACKEND_CATALOG_MANAGEMENT_PORT}
