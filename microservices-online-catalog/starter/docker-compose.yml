@@ -1,0 +1,14 @@
+version: '3.8'
+
+services:
+  catalog-management:
+    build:
+      context: ./backend/catalog-management
+      target: dev
+    ports:
+      - ${BACKEND_CATALOG_MANAGEMENT_PORT}:${BACKEND_CATALOG_MANAGEMENT_PORT}
+    volumes:
+      - ./backend/catalog-management:/app:delegated
+      - /app/node_modules
+    environment:
+      - PORT=${BACKEND_CATALOG_MANAGEMENT_PORT}:${BACKEND_CATALOG_MANAGEMENT_PORT}
