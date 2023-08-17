@@ -18,4 +18,4 @@ CMD ["nodemon", "./bin/www"]
 FROM base as prod
 WORKDIR /app
 COPY . .
-CMD ["node", "./app.js"]
+CMD ["node", "./bin/www"]
