@@ -3,6 +3,7 @@ const express = require('express');
 const csrf = require('csurf');
 const { check, validationResult } = require('express-validator');
 const fetch = require('node-fetch');
+const { map } = require('p-iteration')
 
 const db = require('./db/models');
 
@@ -14,6 +15,17 @@ const asyncHandler = (handler) => (req, res, next) => handler(req, res, next).ca
 
 router.get('/', asyncHandler(async (req, res) => {
   const books = await db.Book.findAll({ order: [['title', 'ASC']] });
+  const ratedBooks = await map(books, async (book) => {
+    bookId = book.id
+
+    let rating = await fetch(
+      `http://rating-api:5000/ratings/${bookId}`
+    )
+    rating = await rating.json()
+    book.rating = rating.average
+    return book
+  })
+
   res.render('book-list', { title: 'Books', books });
 }));
 
