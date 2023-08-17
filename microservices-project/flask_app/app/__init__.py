@@ -11,10 +11,11 @@ app.config.from_object(Configuration)
 
 @app.before_request
 def to_allowed_host():
-    if request.remote_addr != '127.0.0.1':
-        abort(403)
-    if 'host.docker.internal' not in request.url_root:
-        abort(403)
+    print(request.remote_addr, flush=True)
+    # if request.remote_addr != '127.0.0.1':
+    #     abort(403)
+    # if 'host.docker.internal' not in request.url_root:
+    #     abort(403)
 
 
 @app.route('/')

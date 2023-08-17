@@ -98,6 +98,17 @@ router.get('/book/edit/:id(\\d+)', csrfProtection,
     });
   }));
 
+router.get('/book/details/:id(\\d+)', csrfProtection,
+  asyncHandler(async (req, res) => {
+    const bookId = parseInt(req.params.id, 10);
+    const book = await db.Book.findByPk(bookId);
+    res.render('book-view', {
+      title: 'Book Details',
+      book,
+      csrfToken: req.csrfToken(),
+    });
+  }))
+
 router.post('/book/edit/:id(\\d+)', csrfProtection, bookValidators,
   asyncHandler(async (req, res) => {
     const bookId = parseInt(req.params.id, 10);
