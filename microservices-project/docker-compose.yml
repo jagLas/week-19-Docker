@@ -1,0 +1,73 @@
+version: '3.8'
+
+services:
+  db:
+    image: postgres:12-alpine
+    environment:
+      - POSTGRES_PASSWORD=${DB_PASSWORD}
+      - POSTGRES_USER=${DB_USERNAME}
+      - POSTGRES_DB=${DB_DATABASE}
+    volumes:
+      - db-data:/var/lib/postgresql/data
+    networks:
+      pgnodeapp:
+
+  app:
+    build:
+      context: ./nodeapp
+    image: nodeapp
+
+    environment:
+      - DB_USERNAME=${DB_USERNAME}
+      - DB_PASSWORD=${DB_PASSWORD}
+      - DB_DATABASE=${DB_DATABASE}
+      - DB_HOST=db
+      - NODE_ENV=development
+    ports:
+      - ${NODEAPP_PORT}:${NODEAPP_PORT}
+    volumes:
+      - ./nodeapp:/app
+    networks:
+      pgnodeapp:
+    depends_on:
+      - db
+    command: sh -c './wait-for db:5432 -- npm run build-start'
+
+  rating-db:
+    image: postgres:12-alpine
+    environment:
+      - POSTGRES_PASSWORD=${RATINGS_DB_PASSWORD}
+      - POSTGRES_USER=${RATINGS_DB_USERNAME}
+      - POSTGRES_DB=${RATINGS_DB_DATABASE}
+    volumes:
+      - ratings-db-data:/var/lib/postgresql/data
+    networks:
+      ratingsapi:
+
+  rating-api:
+    build:
+      context: ./flask_app
+    image: flaskapp
+    ports:
+      - 5000:5000
+    environment:
+      - DATABASE_URL=postgresql://${RATINGS_DB_USERNAME}:${RATINGS_DB_PASSWORD}@db/${RATINGS_DB_DATABASE}
+      - FLASK_ENV=development
+    volumes:
+      - ./flask_app:/app:delegated
+    networks:
+      ratingsapi:
+    depends_on:
+      - rating-db
+    command: sh -c ./entrypoint.sh
+
+volumes:
+  db-data:
+  ratings-db-data:
+
+networks:
+  pgnodeapp:
+    driver: bridge
+
+  ratingsapi:
+    driver: bridge
