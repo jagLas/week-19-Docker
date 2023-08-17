@@ -28,7 +28,7 @@ services:
     volumes:
       - ./nodeapp:/app
     networks:
-      default:
+      # default:
       pgnodeapp:
     depends_on:
       - db
@@ -57,7 +57,7 @@ services:
     volumes:
       - ./flask_app:/app:delegated
     networks:
-      default:
+      # default:
       ratingsapi:
     depends_on:
       - rating-db

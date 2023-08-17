@@ -19,7 +19,7 @@ router.get('/', asyncHandler(async (req, res) => {
     bookId = book.id
 
     let rating = await fetch(
-      `http://rating-api:5000/ratings/${bookId}`
+      `http://host.docker.internal:5000/ratings/${bookId}`
     )
     rating = await rating.json()
     book.rating = rating.average
@@ -116,7 +116,7 @@ router.get('/book/details/:id(\\d+)', csrfProtection,
     const bookId = parseInt(req.params.id, 10);
     const book = await db.Book.findByPk(bookId);
     let rating = await fetch(
-      `http://rating-api:5000/ratings/${bookId}`
+      `http://host.docker.internal:5000/ratings/${bookId}`
     )
     rating = await rating.json()
     book.rating = rating.average
