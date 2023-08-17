@@ -2,6 +2,7 @@
 const express = require('express');
 const csrf = require('csurf');
 const { check, validationResult } = require('express-validator');
+const fetch = require('node-fetch');
 
 const db = require('./db/models');
 
@@ -102,6 +103,12 @@ router.get('/book/details/:id(\\d+)', csrfProtection,
   asyncHandler(async (req, res) => {
     const bookId = parseInt(req.params.id, 10);
     const book = await db.Book.findByPk(bookId);
+    let rating = await fetch(
+      `http://rating-api:5000/ratings/${bookId}`
+    )
+    rating = await rating.json()
+    book.rating = rating.average
+
     res.render('book-view', {
       title: 'Book Details',
       book,

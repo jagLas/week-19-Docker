@@ -28,6 +28,7 @@ services:
     volumes:
       - ./nodeapp:/app
     networks:
+      default:
       pgnodeapp:
     depends_on:
       - db
@@ -51,11 +52,12 @@ services:
     ports:
       - 5000:5000
     environment:
-      - DATABASE_URL=postgresql://${RATINGS_DB_USERNAME}:${RATINGS_DB_PASSWORD}@db/${RATINGS_DB_DATABASE}
+      - DATABASE_URL=postgresql://${RATINGS_DB_USERNAME}:${RATINGS_DB_PASSWORD}@rating-db/${RATINGS_DB_DATABASE}
       - FLASK_ENV=development
     volumes:
       - ./flask_app:/app:delegated
     networks:
+      default:
       ratingsapi:
     depends_on:
       - rating-db
