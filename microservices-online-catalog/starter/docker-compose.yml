@@ -21,6 +21,8 @@ services:
       - POSTGRES_DB=${BACKEND_ORDER_PROCESSING_DB_DATABASE}
     volumes:
       - order-processing-db-data:/var/lib/postgresql/data
+    networks:
+      order-processing:
 
   order-processing:
     build:
@@ -38,6 +40,9 @@ services:
     depends_on:
       - order-processing-db
     command: ./wait-for order-processing-db:5432 -- npm run db-migrate-seed
+    networks:
+      default:
+      order-processing:
 
   customer-support:
     build:
@@ -58,6 +63,9 @@ services:
     depends_on:
       - customer-support-db
     command: ./wait-for customer-support-db:5432 -- npm run db-migrate-seed
+    networks:
+      default:
+      customer-support:
 
   customer-support-db:
     image: postgres:12.3
@@ -67,7 +75,15 @@ services:
       - POSTGRES_DB=${BACKEND_CUSTOMER_SUPPORT_DB_DATABASE}
     volumes:
       - customer-support-db-data:/var/lib/postgresql/data
+    networks:
+      customer-support:
   
+networks:
+  customer-support:
+    driver: bridge
+  
+  order-processing:
+    driver: bridge
 
 volumes:
   order-processing-db-data:
