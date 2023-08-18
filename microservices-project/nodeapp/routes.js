@@ -128,6 +128,19 @@ router.get('/book/details/:id(\\d+)', csrfProtection,
     });
   }))
 
+router.get('/book/add-rating/:id(\\d+)', csrfProtection,
+  asyncHandler(async (req, res) => {
+    const bookId = parseInt(req.params.id, 10);
+    const book = await db.Book.findByPk(bookId);
+    res.render('add-rating', {
+      title: 'Add Rating',
+      book,
+      csrfToken: req.csrfToken()
+    })
+  }
+
+  ))
+
 router.post('/book/edit/:id(\\d+)', csrfProtection, bookValidators,
   asyncHandler(async (req, res) => {
     const bookId = parseInt(req.params.id, 10);

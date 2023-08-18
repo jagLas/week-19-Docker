@@ -1,0 +1,13 @@
+extends layout.pug
+
+include utils.pug
+
+block content
+  +validationErrorSummary(errors)
+  form(action=`/book/add-rating/${book.id}` method='post')
+    input(type='hidden' name='_csrf' value=csrfToken)
+    +intField('Rating', 'rating')
+    +textField('Email', 'email')
+    div(class='py-4')
+      button(type='submit' class='btn btn-primary') Add rating
+      a(href='/' class='btn btn-warning ml-2') Cancel
