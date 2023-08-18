@@ -137,9 +137,22 @@ router.get('/book/add-rating/:id(\\d+)', csrfProtection,
       book,
       csrfToken: req.csrfToken()
     })
-  }
+  }))
 
-  ))
+router.post('/book/add-rating/:id(\\d+)', csrfProtection,
+  asyncHandler(async (req, res) => {
+    const bookId = parseInt(req.params.id, 10);
+    obj = {
+      method: 'POST',
+    }
+    params = new URLSearchParams({
+      value: parseInt(req.body.value),
+      email: req.body.email
+    }) 
+    await fetch(`http://host.docker.internal:5000/ratings/${bookId}` + `?${params}`, obj)
+
+    res.redirect(`/`);
+  }))
 
 router.post('/book/edit/:id(\\d+)', csrfProtection, bookValidators,
   asyncHandler(async (req, res) => {
