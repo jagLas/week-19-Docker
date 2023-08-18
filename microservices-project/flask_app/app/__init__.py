@@ -13,7 +13,7 @@ app.config.from_object(Configuration)
 @app.before_request
 def to_allowed_host():
     # print(request.host, flush=True)
-    print(request.url_root, flush=True)
+    # print(request.url_root, flush=True)
     if 'host.docker.internal' not in request.url_root:
         abort(403)
 
